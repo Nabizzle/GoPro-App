@@ -10,5 +10,5 @@ setup(
     license = "MIT",
     keywords=["GoPro", "video", "wireless"],
     url="https://github.com/iSensTeam/GoPro-App",
-    install_requires=["open-gopro==0.12.0"],
+    install_requires=["open-gopro==0.12.0", "customtkinter==5.0.4"],
 )
