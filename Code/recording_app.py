@@ -21,13 +21,15 @@ class GoProApp(ctk.CTk):
         self.resolution_dropdown = ctk.CTkOptionMenu(
             self, values=["1080p", "2.7K", "2.7K (4x3)", "4K",
                           "4K (4x3)", "5K (4x3)", "5.3K"],
-            command=self.set_resolution, variable=default_resolution)
+            command=self.set_resolution, variable=default_resolution,
+            state="disabled")
         self.resolution_dropdown.grid(row=0, column=0, padx=10, pady=10)
 
         default_frame_rate = ctk.StringVar(value="Select Frame Rate")
         self.frame_rate_dropdown = ctk.CTkOptionMenu(
             self, values=["24 fps", "30 fps", "60 fps" "120 fps", "240 fps"],
-            command=self.set_frame_rate, variable=default_frame_rate)
+            command=self.set_frame_rate, variable=default_frame_rate,
+            state="disabled")
         self.frame_rate_dropdown.grid(row=0, column=1, padx=10, pady=10)
 
     def connect_callback(self):
@@ -38,6 +40,8 @@ class GoProApp(ctk.CTk):
         if self.gopro.is_ble_connected:
             print("GoPro Connected")
             self.connect._state = "disabled"
+            self.frame_rate_dropdown.configure(state="enabled")
+            self.resolution_dropdown.configure(state="enabled")
         else:
             print("The GoPro did not connect")
 
