@@ -19,10 +19,16 @@ class GoProApp(ctk.CTk):
         # Drop Down Menus
         default_resolution = ctk.StringVar(value="Select Resolution")
         self.resolution_dropdown = ctk.CTkOptionMenu(
-            self, values=["1080p", "1440p", "2.7K", "2.7K (4x3)", "4K",
-                          "4K (4x3)", "5K", "5K (4x3)", "5.3K", "5.3K (4x3)"],
+            self, values=["1080p", "2.7K", "2.7K (4x3)", "4K",
+                          "4K (4x3)", "5K (4x3)", "5.3K"],
             command=self.set_resolution, variable=default_resolution)
         self.resolution_dropdown.grid(row=0, column=0, padx=10, pady=10)
+
+        default_frame_rate = ctk.StringVar(value="Select Frame Rate")
+        self.frame_rate_dropdown = ctk.CTkOptionMenu(
+            self, values=["24 fps", "30 fps", "60 fps" "120 fps", "240 fps"],
+            command=self.set_frame_rate, variable=default_frame_rate)
+        self.frame_rate_dropdown.grid(row=0, column=1, padx=10, pady=10)
 
     def connect_callback(self):
         print("Trying GoPro Connection")
@@ -49,35 +55,94 @@ class GoProApp(ctk.CTk):
             case "1080p":
                 self.gopro.ble_setting.resolution.set(
                     Params.Resolution.RES_1080)
-            case "1440p":
-                self.gopro.ble_setting.resolution.set(
-                    Params.Resolution.RES_1440)
+                self.frame_rate_dropdown.configure(values=[
+                    "30 fps",
+                    "60 fps",
+                    "120 fps",
+                    "240 fps"
+                ], variable=ctk.StringVar(value="30 fps"))
+                self.set_frame_rate(self.frame_rate_dropdown.get())
             case "2.7K":
                 self.gopro.ble_setting.resolution.set(
                     Params.Resolution.RES_2_7K)
+                self.frame_rate_dropdown.configure(values=[
+                    "60 fps",
+                    "120 fps",
+                    "240 fps"
+                ], variable=ctk.StringVar(value="60 fps"))
+                self.set_frame_rate(self.frame_rate_dropdown.get())
             case "2.7K (4x3)":
                 self.gopro.ble_setting.resolution.set(
                     Params.Resolution.RES_2_7K_4_3)
+                self.frame_rate_dropdown.configure(values=[
+                    "60 fps",
+                    "120 fps"
+                ], variable=ctk.StringVar(value="60 fps"))
+                self.set_frame_rate(self.frame_rate_dropdown.get())
             case "4K":
                 self.gopro.ble_setting.resolution.set(
                     Params.Resolution.RES_4K)
+                self.frame_rate_dropdown.configure(values=[
+                    "24 fps",
+                    "30 fps",
+                    "60 fps",
+                    "120 fps"
+                ], variable=ctk.StringVar(value="24 fps"))
+                self.set_frame_rate(self.frame_rate_dropdown.get())
             case "4K (4x3)":
                 self.gopro.ble_setting.resolution.set(
                     Params.Resolution.RES_4K_4_3)
-            case"5K":
-                self.gopro.ble_setting.resolution.set(
-                    Params.Resolution.RES_5K)
+                self.frame_rate_dropdown.configure(
+                    values=["60 fps"], variable=ctk.StringVar(value="60 fps"))
+                self.set_frame_rate(self.frame_rate_dropdown.get())
             case "5K (4x3)":
                 self.gopro.ble_setting.resolution.set(
                     Params.Resolution.RES_5_K_4_3)
+                self.frame_rate_dropdown.configure(
+                    values=["30 fps"], variable=ctk.StringVar(value="30 fps"))
+                self.set_frame_rate(self.frame_rate_dropdown.get())
             case "5.3K":
                 self.gopro.ble_setting.resolution.set(
                     Params.Resolution.RES_5_3_K)
-            case "5.3K (4x3)":
-                self.gopro.ble_setting.resolution.set(
-                    Params.Resolution.RES_5_3_K_4_3)
+                self.frame_rate_dropdown.configure(values=[
+                    "30 fps",
+                    "60 fps"
+                ], variable=ctk.StringVar(value="30 fps"))
+                self.set_frame_rate(self.frame_rate_dropdown.get())
             case _:
                 print("This is not an available resolution")
+
+    def set_frame_rate(self, choice):
+        match choice:
+            case "24 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_24)
+            case "25 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_25)
+            case "30 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_30)
+            case "50 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_50)
+            case "60 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_60)
+            case "100 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_100)
+            case"120 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_120)
+            case "200 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_200)
+            case "240 fps":
+                self.gopro.ble_setting.fps.set(
+                    Params.FPS.FPS_240)
+            case _:
+                print("This is not an available frame rate")
 
 
 if __name__ == "__main__":
