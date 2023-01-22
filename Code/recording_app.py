@@ -15,6 +15,7 @@ class GoProApp(ctk.CTk):
         self.title("GoPro Control App")
         self.config(padx=10, pady=10)
         # Drop Down Menus
+        # Resolution
         default_resolution = ctk.StringVar(value="1080p")
         self.resolution_dropdown = ctk.CTkOptionMenu(
             self, values=["1080p", "2.7K", "2.7K (4x3)", "4K",
@@ -22,27 +23,32 @@ class GoProApp(ctk.CTk):
             command=self.set_resolution, variable=default_resolution,
             state="disabled")
         self.resolution_dropdown.grid(row=0, column=0, padx=10, pady=10)
-
+        # Frame Rate
         default_frame_rate = ctk.StringVar(value="30 fps")
         self.frame_rate_dropdown = ctk.CTkOptionMenu(
             self, values=["24 fps", "30 fps", "60 fps" "120 fps", "240 fps"],
             command=self.set_frame_rate, variable=default_frame_rate,
             state="disabled")
         self.frame_rate_dropdown.grid(row=0, column=1, padx=10, pady=10)
-        # Recording Switch
-        self.recording_variable = ctk.StringVar(value="off")
-        self.recording_switch = ctk.CTkSwitch(
-            self, text="Record Video", variable=self.recording_variable,
-            onvalue="on", offvalue="off", command=self.recording_switch_event,
-            state="disabled", switch_width=50, switch_height=25)
-        self.recording_switch.grid(row=0, column=2, padx=10, pady=10)
         # Select FOV
         default_fov = ctk.StringVar(value="Wide")
         self.fov_selector = ctk.CTkOptionMenu(
             self, values=["Linear", "Horizon Leveling", "Narrow",
                           "Super View", "Wide"], variable=default_fov,
             command=self.set_fov, state="disabled")
-        self.fov_selector.grid(row=1, column=0, padx=10, pady=10)
+        self.fov_selector.grid(row=0, column=2, padx=10, pady=10)
+        # Recording Switch
+        self.recording_variable = ctk.StringVar(value="off")
+        self.recording_switch = ctk.CTkSwitch(
+            self, text="Record Video", variable=self.recording_variable,
+            onvalue="on", offvalue="off", command=self.recording_switch_event,
+            state="disabled", switch_width=50, switch_height=25)
+        self.recording_switch.grid(row=1, column=0, padx=10, pady=10)
+        # Photo Button
+        self.photo_button = ctk.CTkButton(self, text="Take a Photo",
+                                          command=self.take_photo,
+                                          state="disabled")
+        self.photo_button.grid(row=1, column=1, padx=10, pady=10)
         # Battery Indicator
         self.poll_battery = ctk.CTkButton(
             self, text="Refresh Battery Indicator",
@@ -183,18 +189,25 @@ class GoProApp(ctk.CTk):
                 messagebox.showerror(title="Unknown FOV",
                                      message="This FOV is not available")
 
+    def take_photo(self):
+        self.gopro.ble_command.load_preset_group(
+                group=Params.PresetGroup.PHOTO)
+        self.gopro.ble_command.set_shutter(shutter=Params.Toggle.ENABLE)
+        self.gopro.ble_command.set_shutter(shutter=Params.Toggle.DISABLE)
+        self.gopro.ble_command.load_preset_group(
+                group=Params.PresetGroup.VIDEO)
+
     def connect_callback(self):
         answer = messagebox.askokcancel(
             title="Proceed?", message="Is the GoPro in pairing mode?")
         if not answer:
             return
-        messagebox.showinfo(title="Connecting...",
-                            message="Trying GoPro Connection")
+
         if not self.gopro.is_ble_connected:
             self.gopro.open()
 
         if self.gopro.is_ble_connected:
-            messagebox.showinfo(title="Connecting...",
+            messagebox.showinfo(title="Connection Successful",
                                 message="GoPro Connected")
             self.gopro.ble_command.load_preset_group(
                 group=Params.PresetGroup.VIDEO)
@@ -206,6 +219,7 @@ class GoProApp(ctk.CTk):
             self.resolution_dropdown.configure(state="enabled")
             self.fov_selector.configure(state="enabled")
             self.recording_switch.configure(state="enabled")
+            self.photo_button.configure(state="enabled")
             self.poll_battery.configure(state="enabled")
             self.poll_battery_callback()
         else:
