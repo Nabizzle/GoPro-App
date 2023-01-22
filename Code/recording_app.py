@@ -57,7 +57,7 @@ class GoProApp(ctk.CTk):
                                           state="disabled")
         self.photo_button.grid(row=1, column=1, padx=10, pady=10,
                                sticky="nsew")
-        # File Name Entry
+        # Save Files
         self.file_name_entry = ctk.CTkEntry(self,
                                             placeholder_text="Enter File Name")
         self.file_name_entry.grid(row=1, column=2, padx=10, pady=10,
@@ -72,6 +72,12 @@ class GoProApp(ctk.CTk):
                                                variable=self.stamp_check,
                                                onvalue="on", offvalue="off")
         self.timestamp_check.grid(row=3, column=3, padx=10, pady=10)
+        if not os.path.exists("../Data"):
+            os.makedirs("../Data")
+        self.previously_saved_files = []
+        for (_, _, filenames) in os.walk("../Data"):
+            files = [parts.split("_")[-1] for parts in filenames]
+            self.previously_saved_files.extend(files)
         # Battery Indicator
         self.poll_battery = ctk.CTkButton(
             self, text="Refresh Battery Indicator",
@@ -236,9 +242,11 @@ class GoProApp(ctk.CTk):
         if not os.path.exists(local_directory):
             os.makedirs(local_directory)
         for file in file_names:
-            local_file = local_directory + timestamp + file
-            self.gopro.http_command.download_file(camera_file=file,
-                                                  local_file=local_file)
+            if file not in self.previously_saved_files:
+                local_file = local_directory + timestamp + file
+                self.gopro.http_command.download_file(camera_file=file,
+                                                      local_file=local_file)
+                self.previously_saved_files.append(file)
 
     def connect_callback(self):
         answer = messagebox.askokcancel(
