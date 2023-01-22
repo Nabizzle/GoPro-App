@@ -1,7 +1,14 @@
 {
     "cSpell.words": [
+        "columnspan",
         "customtkinter",
-        "gopro"
+        "gopro",
+        "offvalue",
+        "onvalue",
+        "padx",
+        "pady",
+        "rowspan",
+        "Superview"
     ],
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true
