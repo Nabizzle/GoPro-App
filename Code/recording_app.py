@@ -14,6 +14,7 @@ class GoProApp(ctk.CTk):
         # Global App Parameters)
         self.title("GoPro Control App")
         self.config(padx=10, pady=10)
+        self.resizable(False, False)
         # Drop Down Menus
         # Resolution
         default_resolution = ctk.StringVar(value="1080p")
@@ -22,49 +23,67 @@ class GoProApp(ctk.CTk):
                           "4K (4x3)", "5K (4x3)", "5.3K"],
             command=self.set_resolution, variable=default_resolution,
             state="disabled")
-        self.resolution_dropdown.grid(row=0, column=0, padx=10, pady=10)
+        self.resolution_dropdown.grid(row=0, column=0, padx=10, pady=10,
+                                      sticky="nsew")
         # Frame Rate
         default_frame_rate = ctk.StringVar(value="30 fps")
         self.frame_rate_dropdown = ctk.CTkOptionMenu(
             self, values=["24 fps", "30 fps", "60 fps" "120 fps", "240 fps"],
             command=self.set_frame_rate, variable=default_frame_rate,
             state="disabled")
-        self.frame_rate_dropdown.grid(row=0, column=1, padx=10, pady=10)
+        self.frame_rate_dropdown.grid(row=0, column=1, padx=10, pady=10,
+                                      sticky="nsew")
         # Select FOV
         default_fov = ctk.StringVar(value="Wide")
         self.fov_selector = ctk.CTkOptionMenu(
             self, values=["Linear", "Horizon Leveling", "Narrow",
                           "Super View", "Wide"], variable=default_fov,
             command=self.set_fov, state="disabled")
-        self.fov_selector.grid(row=0, column=2, padx=10, pady=10)
+        self.fov_selector.grid(row=0, column=2, padx=10, pady=10,
+                               sticky="nsew")
         # Recording Switch
         self.recording_variable = ctk.StringVar(value="off")
         self.recording_switch = ctk.CTkSwitch(
             self, text="Record Video", variable=self.recording_variable,
             onvalue="on", offvalue="off", command=self.recording_switch_event,
             state="disabled", switch_width=50, switch_height=25)
-        self.recording_switch.grid(row=1, column=0, padx=10, pady=10)
+        self.recording_switch.grid(row=1, column=0, padx=10, pady=10,
+                                   sticky="nsew")
         # Photo Button
         self.photo_button = ctk.CTkButton(self, text="Take a Photo",
                                           command=self.take_photo,
                                           state="disabled")
-        self.photo_button.grid(row=1, column=1, padx=10, pady=10)
+        self.photo_button.grid(row=1, column=1, padx=10, pady=10,
+                               sticky="nsew")
+        # File Name Entry
+        self.file_name_entry = ctk.CTkEntry(self,
+                                            placeholder_text="Enter File Name")
+        self.file_name_entry.grid(row=1, column=2, padx=10, pady=10,
+                                  sticky="nsew")
+        self.save_files_button = ctk.CTkButton(self, text="Save Out Files",
+                                               command=self.save_files,
+                                               state="enabled")
+        self.save_files_button.grid(row=3, column=2, padx=10, pady=10,
+                                    sticky="nsew")
         # Battery Indicator
         self.poll_battery = ctk.CTkButton(
             self, text="Refresh Battery Indicator",
             command=self.poll_battery_callback, state="disabled")
-        self.poll_battery.grid(row=2, column=0, padx=10, pady=10)
+        self.poll_battery.grid(row=2, column=0, padx=10, pady=10,
+                               sticky="nsew")
         self.battery_indicator = BatteryIndicator(self)
-        self.battery_indicator.grid(row=2, column=1, columnspan=2)
+        self.battery_indicator.grid(row=2, column=1, columnspan=2,
+                                    padx=10, pady=10, sticky="nsew")
         # Connection Button
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
-        self.connect.grid(row=3, column=1, columnspan=2, padx=10, pady=10)
+        self.connect.grid(row=3, column=1, padx=10, pady=10, sticky="nsew")
         default_gopro_name = ctk.StringVar(value="GoPro 5990")
         self.gopro_list = ctk.CTkOptionMenu(
             self, values=["GoPro 5990", "Connect to First"],
             command=self.select_gopro, variable=default_gopro_name)
-        self.gopro_list.grid(row=3, column=0, padx=10, pady=10)
+        self.gopro_list.grid(row=3, column=0, padx=10, pady=10,
+                             sticky="nsew")
 
     def set_resolution(self, choice):
         match choice:
@@ -197,6 +216,10 @@ class GoProApp(ctk.CTk):
         self.gopro.ble_command.load_preset_group(
                 group=Params.PresetGroup.VIDEO)
 
+    def save_files(self):
+        file_name = self.file_name_entry.get()
+        print(file_name)
+
     def connect_callback(self):
         answer = messagebox.askokcancel(
             title="Proceed?", message="Is the GoPro in pairing mode?")
@@ -302,11 +325,12 @@ class BatteryIndicator(ctk.CTkFrame):
         super().__init__(*args, **kwargs)
         self.configure(fg_color="transparent")
         self.battery_percent_text = ctk.CTkLabel(self, text="")
-        self.battery_percent_text.grid(row=0, column=0)
+        self.battery_percent_text.grid(row=0, column=0, sticky="nsew")
         self.battery_bar = ctk.CTkProgressBar(self, progress_color="green")
-        self.battery_bar.grid(row=1, column=0)
+        self.battery_bar.grid(row=1, column=0, sticky="nsew")
         self.battery_time_text = ctk.CTkLabel(self, text="0m")
-        self.battery_time_text.grid(row=0, column=1, rowspan=2, padx=10)
+        self.battery_time_text.grid(row=0, column=1, rowspan=2, padx=10,
+                                    sticky="nsew")
         self.update(0.0, "", "")
 
     def update(self, battery_percent: float, resolution: str, fps: str):
