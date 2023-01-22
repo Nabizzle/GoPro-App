@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from tkinter import messagebox
 from open_gopro import WirelessGoPro, Params
 
 ctk.set_appearance_mode("System")
@@ -112,7 +113,9 @@ class GoProApp(ctk.CTk):
                 ], variable=ctk.StringVar(value="30 fps"))
                 self.set_frame_rate(self.frame_rate_dropdown.get())
             case _:
-                print("This is not an available resolution")
+                messagebox.showerror(
+                    title="Unknown Resolution",
+                    message="This is not an available resolution")
 
         self.poll_battery_callback()
 
@@ -146,17 +149,25 @@ class GoProApp(ctk.CTk):
                 self.gopro.ble_setting.fps.set(
                     Params.FPS.FPS_240)
             case _:
-                print("This is not an available frame rate")
+                messagebox.showerror(
+                    title="Unknown Frame Rate",
+                    message="This is not an available frame rate")
 
         self.poll_battery_callback()
 
     def connect_callback(self):
-        print("Trying GoPro Connection")
+        answer = messagebox.askokcancel(
+            title="Proceed?", message="Is the GoPro in pairing mode?")
+        if not answer:
+            return
+        messagebox.showinfo(title="Connecting...",
+                            message="Trying GoPro Connection")
         if not self.gopro.is_ble_connected:
             self.gopro.open()
 
         if self.gopro.is_ble_connected:
-            print("GoPro Connected")
+            messagebox.showinfo(title="Connecting...",
+                                message="GoPro Connected")
             self.gopro.ble_command.load_preset_group(
                 group=Params.PresetGroup.VIDEO)
             self.connect._state = "disabled"
