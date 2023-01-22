@@ -1,6 +1,8 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from open_gopro import WirelessGoPro, Params
+import os
+import datetime as dt
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("dark-blue")
@@ -65,6 +67,11 @@ class GoProApp(ctk.CTk):
                                                state="enabled")
         self.save_files_button.grid(row=3, column=2, padx=10, pady=10,
                                     sticky="nsew")
+        self.stamp_check = ctk.StringVar(value="off")
+        self.timestamp_check = ctk.CTkCheckBox(self, text="Timestamp Save?",
+                                               variable=self.stamp_check,
+                                               onvalue="on", offvalue="off")
+        self.timestamp_check.grid(row=3, column=3, padx=10, pady=10)
         # Battery Indicator
         self.poll_battery = ctk.CTkButton(
             self, text="Refresh Battery Indicator",
@@ -74,13 +81,16 @@ class GoProApp(ctk.CTk):
         self.battery_indicator = BatteryIndicator(self)
         self.battery_indicator.grid(row=2, column=1, columnspan=2,
                                     padx=10, pady=10, sticky="nsew")
+        # SD Card Remaining Time
+        self.sd_time_label = ctk.CTkLabel(self, text="0 minutes")
+        self.sd_time_label.grid(row=2, column=3, padx=10, pady=10)
         # Connection Button
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
         self.connect.grid(row=3, column=1, padx=10, pady=10, sticky="nsew")
         default_gopro_name = ctk.StringVar(value="GoPro 5990")
         self.gopro_list = ctk.CTkOptionMenu(
-            self, values=["GoPro 5990", "Connect to First"],
+            self, values=["GoPro 5990", "Connect to First Available"],
             command=self.select_gopro, variable=default_gopro_name)
         self.gopro_list.grid(row=3, column=0, padx=10, pady=10,
                              sticky="nsew")
@@ -217,8 +227,21 @@ class GoProApp(ctk.CTk):
                 group=Params.PresetGroup.VIDEO)
 
     def save_files(self):
-        file_name = self.file_name_entry.get()
-        print(file_name)
+        timestamp = ""
+        if self.stamp_check.get() == "on":
+            now = dt.datetime.now()
+            timestamp = now.strftime("%Y%m%d_%H%M%S") + "_"
+        directory_name = self.file_name_entry.get()
+        gopro_file_list =\
+            self.gopro.http_command.get_media_list().data["files"]
+        file_names = [file["n"] for file in gopro_file_list]
+        local_directory = f"../Data/{directory_name}/"
+        if not os.path.exists(local_directory):
+            os.makedirs(local_directory)
+        for file in file_names:
+            local_file = local_directory + timestamp + file
+            self.gopro.http_command.download_file(camera_file=file,
+                                                  local_file=local_file)
 
     def connect_callback(self):
         answer = messagebox.askokcancel(
