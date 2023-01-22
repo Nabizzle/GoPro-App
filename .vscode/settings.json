@@ -7,9 +7,13 @@
         "onvalue",
         "padx",
         "pady",
+        "Quik",
         "rowspan",
         "Superview"
     ],
     "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "cSpell.ignoreWords": [
+        "HHMMSS"
+    ]
 }
