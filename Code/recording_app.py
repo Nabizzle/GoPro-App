@@ -9,39 +9,46 @@ ctk.set_default_color_theme("dark-blue")
 
 
 class GoProApp(ctk.CTk):
+    PADX = 10
+    PADY = 10
+
     def __init__(self) -> None:
         super().__init__()
+        # selected GoPro to connect to
         self.gopro_name = "GoPro 5990"
         self.gopro = WirelessGoPro(target=self.gopro_name)
+
         # Global App Parameters)
         self.title("GoPro Control App")
-        self.config(padx=10, pady=10)
+        self.config(padx=self.PADX, pady=self.PADY)
         self.resizable(False, False)
-        # Drop Down Menus
-        # Resolution
+
+        # Resolution Dropdown
         default_resolution = ctk.StringVar(value="1080p")
         self.resolution_dropdown = ctk.CTkOptionMenu(
             self, values=["1080p", "2.7K", "2.7K (4x3)", "4K",
                           "4K (4x3)", "5K (4x3)", "5.3K"],
             command=self.set_resolution, variable=default_resolution,
             state="disabled")
-        self.resolution_dropdown.grid(row=0, column=0, padx=10, pady=10,
-                                      sticky="nsew")
-        # Frame Rate
+        self.resolution_dropdown.grid(row=0, column=0, padx=self.PADX,
+                                      pady=self.PADY, sticky="nsew")
+
+        # Frame Rate Dropdown
         default_frame_rate = ctk.StringVar(value="30 fps")
         self.frame_rate_dropdown = ctk.CTkOptionMenu(
             self, values=["24 fps", "30 fps", "60 fps" "120 fps", "240 fps"],
             command=self.set_frame_rate, variable=default_frame_rate,
             state="disabled")
-        self.frame_rate_dropdown.grid(row=0, column=1, padx=10, pady=10,
-                                      sticky="nsew")
+        self.frame_rate_dropdown.grid(row=0, column=1, padx=self.PADX,
+                                      pady=self.PADY, sticky="nsew")
+
         # Select FOV
         default_fov = ctk.StringVar(value="Wide")
         self.fov_selector = ctk.CTkOptionMenu(
             self, values=["Linear", "Horizon Leveling", "Narrow",
                           "Super View", "Wide"], variable=default_fov,
             command=self.set_fov, state="disabled")
-        self.fov_selector.grid(row=0, column=2, padx=10, pady=10,
+        self.fov_selector.grid(row=0, column=2, padx=self.PADX, pady=self.PADY,
                                sticky="nsew")
         # Recording Switch
         self.recording_variable = ctk.StringVar(value="off")
@@ -49,29 +56,30 @@ class GoProApp(ctk.CTk):
             self, text="Record Video", variable=self.recording_variable,
             onvalue="on", offvalue="off", command=self.recording_switch_event,
             state="disabled", switch_width=50, switch_height=25)
-        self.recording_switch.grid(row=1, column=0, padx=10, pady=10,
-                                   sticky="nsew")
+        self.recording_switch.grid(row=1, column=0, padx=self.PADX,
+                                   pady=self.PADY, sticky="nsew")
         # Photo Button
         self.photo_button = ctk.CTkButton(self, text="Take a Photo",
                                           command=self.take_photo,
                                           state="disabled")
-        self.photo_button.grid(row=1, column=1, padx=10, pady=10,
+        self.photo_button.grid(row=1, column=1, padx=self.PADX, pady=self.PADY,
                                sticky="nsew")
-        # Save Files
+        # Save Out Files
         self.file_name_entry = ctk.CTkEntry(self,
                                             placeholder_text="Enter File Name")
-        self.file_name_entry.grid(row=1, column=2, padx=10, pady=10,
-                                  sticky="nsew")
+        self.file_name_entry.grid(row=1, column=2, padx=self.PADX,
+                                  pady=self.PADY, sticky="nsew")
         self.save_files_button = ctk.CTkButton(self, text="Save Out Files",
                                                command=self.save_files,
                                                state="enabled")
-        self.save_files_button.grid(row=3, column=2, padx=10, pady=10,
-                                    sticky="nsew")
+        self.save_files_button.grid(row=3, column=2, padx=self.PADX,
+                                    pady=self.PADY, sticky="nsew")
         self.stamp_check = ctk.StringVar(value="off")
         self.timestamp_check = ctk.CTkCheckBox(self, text="Timestamp Save?",
                                                variable=self.stamp_check,
                                                onvalue="on", offvalue="off")
-        self.timestamp_check.grid(row=3, column=3, padx=10, pady=10)
+        self.timestamp_check.grid(row=3, column=3, padx=self.PADX,
+                                  pady=self.PADY)
         if not os.path.exists("../Data"):
             os.makedirs("../Data")
         self.previously_saved_files = []
@@ -82,20 +90,22 @@ class GoProApp(ctk.CTk):
         self.poll_battery = ctk.CTkButton(
             self, text="Refresh Battery Indicator",
             command=self.poll_battery_callback, state="disabled")
-        self.poll_battery.grid(row=2, column=0, padx=10, pady=10,
+        self.poll_battery.grid(row=2, column=0, padx=self.PADX, pady=self.PADY,
                                sticky="nsew")
         self.battery_indicator = BatteryIndicator(self)
         self.battery_indicator.grid(row=2, column=1, columnspan=3,
-                                    padx=10, pady=10, sticky="nsew")
+                                    padx=self.PADX, pady=self.PADY,
+                                    sticky="nsew")
         # Connection Button
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
-        self.connect.grid(row=3, column=1, padx=10, pady=10, sticky="nsew")
+        self.connect.grid(row=3, column=1, padx=self.PADX, pady=self.PADY,
+                          sticky="nsew")
         default_gopro_name = ctk.StringVar(value="GoPro 5990")
         self.gopro_list = ctk.CTkOptionMenu(
             self, values=["GoPro 5990", "Connect to First Available"],
             command=self.select_gopro, variable=default_gopro_name)
-        self.gopro_list.grid(row=3, column=0, padx=10, pady=10,
+        self.gopro_list.grid(row=3, column=0, padx=self.PADX, pady=self.PADY,
                              sticky="nsew")
 
     def set_resolution(self, choice):
@@ -272,6 +282,7 @@ class GoProApp(ctk.CTk):
             self.recording_switch.configure(state="enabled")
             self.photo_button.configure(state="enabled")
             self.poll_battery.configure(state="enabled")
+            self.start_cam_button.configure(state="enabled")
             self.poll_battery_callback()
         else:
             messagebox.showerror(title="Failed to Connect",
@@ -352,6 +363,8 @@ class BatteryIndicator(ctk.CTkFrame):
         },
     }
 
+    PADX=10
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.configure(fg_color="transparent")
@@ -362,15 +375,15 @@ class BatteryIndicator(ctk.CTkFrame):
         self.battery_bar.grid(row=1, column=0)
         # Battery Life
         self.battery_time_label = ctk.CTkLabel(self, text="Battery Life")
-        self.battery_time_label.grid(row=0, column=1, padx=10)
+        self.battery_time_label.grid(row=0, column=1, padx=self.PADX)
         self.battery_time_text = ctk.CTkLabel(self, text="0m")
-        self.battery_time_text.grid(row=1, column=1, padx=10,
+        self.battery_time_text.grid(row=1, column=1, padx=self.PADX,
                                     sticky="nsew")
         # SD Card Remaining Time
         self.sd_time_label = ctk.CTkLabel(self, text="Time Remaining on Card")
-        self.sd_time_label.grid(row=0, column=2, padx=10)
+        self.sd_time_label.grid(row=0, column=2, padx=self.PADX)
         self.sd_time_text = ctk.CTkLabel(self, text="0 minutes")
-        self.sd_time_text.grid(row=1, column=2, padx=10, sticky="nsew")
+        self.sd_time_text.grid(row=1, column=2, padx=self.PADX, sticky="nsew")
         self.update(0.0, "", "", 0)
 
     def update(self, battery_percent: float, resolution: str, fps: str,
