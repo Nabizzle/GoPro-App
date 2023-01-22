@@ -12,10 +12,7 @@ class GoProApp(ctk.CTk):
         self.gopro = WirelessGoPro(target="GoPro 5990")
         # Global App Parameters
         self.title("GoPro Control App")
-        # Connection Button
-        self.connect = ctk.CTkButton(self, text="Open Connection",
-                                     command=self.connect_callback)
-        self.connect.grid(row=1, column=0, padx=10, pady=10)
+        self.config(padx=10, pady=10)
         # Drop Down Menus
         default_resolution = ctk.StringVar(value="Select Resolution")
         self.resolution_dropdown = ctk.CTkOptionMenu(
@@ -31,28 +28,17 @@ class GoProApp(ctk.CTk):
             command=self.set_frame_rate, variable=default_frame_rate,
             state="disabled")
         self.frame_rate_dropdown.grid(row=0, column=1, padx=10, pady=10)
-
-    def connect_callback(self):
-        print("Trying GoPro Connection")
-        if not self.gopro.is_ble_connected:
-            self.gopro.open()
-
-        if self.gopro.is_ble_connected:
-            print("GoPro Connected")
-            self.connect._state = "disabled"
-            self.frame_rate_dropdown.configure(state="enabled")
-            self.resolution_dropdown.configure(state="enabled")
-        else:
-            print("The GoPro did not connect")
-
-    def close_callback(self):
-        if self.gopro.is_ble_connected:
-            self.gopro.close()
-
-        if not self.gopro.is_ble_connected:
-            print("GoPro Disconnected")
-        else:
-            print("The GoPro did not disconnect.")
+        # Recording Switch
+        self.recording_variable = ctk.StringVar(value="off")
+        self.recording_switch = ctk.CTkSwitch(
+            self, text="Record Video", variable=self.recording_variable,
+            onvalue="on", offvalue="off", command=self.recording_switch_event,
+            state="disabled", switch_width=50, switch_height=25)
+        self.recording_switch.grid(row=1, column=0, padx=10, pady=10)
+        # Connection Button
+        self.connect = ctk.CTkButton(self, text="Open Connection",
+                                     command=self.connect_callback)
+        self.connect.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
     def set_resolution(self, choice):
         match choice:
@@ -147,6 +133,39 @@ class GoProApp(ctk.CTk):
                     Params.FPS.FPS_240)
             case _:
                 print("This is not an available frame rate")
+
+    def connect_callback(self):
+        print("Trying GoPro Connection")
+        if not self.gopro.is_ble_connected:
+            self.gopro.open()
+
+        if self.gopro.is_ble_connected:
+            print("GoPro Connected")
+            self.connect._state = "disabled"
+            self.frame_rate_dropdown.configure(state="enabled")
+            self.resolution_dropdown.configure(state="enabled")
+            self.recording_switch.configure(state="enabled")
+        else:
+            print("The GoPro did not connect")
+
+    def close_callback(self):
+        if self.gopro.is_ble_connected:
+            self.gopro.close()
+
+        if not self.gopro.is_ble_connected:
+            print("GoPro Disconnected")
+        else:
+            print("The GoPro did not disconnect.")
+
+    def recording_switch_event(self):
+        if self.recording_variable.get() == "on":
+            self.recording_switch.configure(text="Recording",
+                                            button_color="red")
+            self.gopro.ble_command.set_shutter(shutter=Params.Toggle.ENABLE)
+        else:
+            self.recording_switch.configure(text="Standby",
+                                            button_color="white")
+            self.gopro.ble_command.set_shutter(shutter=Params.Toggle.DISABLE)
 
 
 if __name__ == "__main__":
