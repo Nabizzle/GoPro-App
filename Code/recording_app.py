@@ -34,11 +34,18 @@ class GoProApp(ctk.CTk):
             self, text="Record Video", variable=self.recording_variable,
             onvalue="on", offvalue="off", command=self.recording_switch_event,
             state="disabled", switch_width=50, switch_height=25)
-        self.recording_switch.grid(row=1, column=0, padx=10, pady=10)
+        self.recording_switch.grid(row=0, column=2, padx=10, pady=10)
+        # Battery Indicator
+        self.poll_battery = ctk.CTkButton(
+            self, text="Refresh Battery Indicator",
+            command=self.poll_battery_callback, state="disabled")
+        self.poll_battery.grid(row=1, column=0, padx=10, pady=10)
+        self.battery_indicator = BatteryIndicator(self)
+        self.battery_indicator.grid(row=1, column=1, columnspan=2)
         # Connection Button
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
-        self.connect.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+        self.connect.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
 
     def set_resolution(self, choice):
         match choice:
@@ -101,6 +108,8 @@ class GoProApp(ctk.CTk):
                 self.set_frame_rate(self.frame_rate_dropdown.get())
             case _:
                 print("This is not an available resolution")
+            
+        self.poll_battery_callback()
 
     def set_frame_rate(self, choice):
         match choice:
@@ -134,6 +143,8 @@ class GoProApp(ctk.CTk):
             case _:
                 print("This is not an available frame rate")
 
+        self.poll_battery_callback()
+
     def connect_callback(self):
         print("Trying GoPro Connection")
         if not self.gopro.is_ble_connected:
@@ -145,6 +156,8 @@ class GoProApp(ctk.CTk):
             self.frame_rate_dropdown.configure(state="enabled")
             self.resolution_dropdown.configure(state="enabled")
             self.recording_switch.configure(state="enabled")
+            self.poll_battery.configure(state="enabled")
+            self.battery_indicator.update(0.0, "", "")
         else:
             print("The GoPro did not connect")
 
@@ -166,6 +179,78 @@ class GoProApp(ctk.CTk):
             self.recording_switch.configure(text="Standby",
                                             button_color="white")
             self.gopro.ble_command.set_shutter(shutter=Params.Toggle.DISABLE)
+
+    def poll_battery_callback(self):
+        battery_percent_dict = self.gopro.ble_status.int_batt_per.get_value()
+        battery_percent = list(battery_percent_dict.values())[0] / 100
+        self.battery_indicator.update(battery_percent,
+                                      self.resolution_dropdown.get(),
+                                      self.frame_rate_dropdown.get())
+
+
+class BatteryIndicator(ctk.CTkFrame):
+    BATTERY_RECORDING_TIMES = {
+        "1080p": {
+            "30 fps": 120,
+            "60 fps": 90,
+            "120 fps": 64,
+            "240 fps": 48,
+        },
+        "2.7K": {
+            "60 fps": 75,
+            "120 fps": 60,
+            "240 fps": 44,
+        },
+        "2.7K (4x3)": {
+            "60 fps": 75,
+            "120 fps": 59,
+        },
+        "4K": {
+            "24 fps": 76,
+            "30 fps": 76,
+            "60 fps": 72,
+            "120 fps": 36,
+        },
+        "4K (4x3)": {
+            "60 fps": 51,
+        },
+        "5K (4x3)": {
+            "30 fps": 64,
+        },
+        "5.3K": {
+            "30 fps": 74,
+            "60 fps": 47,
+        },
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.configure(fg_color="transparent")
+        self.battery_percent_text = ctk.CTkLabel(self, text="")
+        self.battery_percent_text.grid(row=0, column=0)
+        self.battery_bar = ctk.CTkProgressBar(self, progress_color="green")
+        self.battery_bar.grid(row=1, column=0)
+        self.battery_time_text = ctk.CTkLabel(self, text="0m")
+        self.battery_time_text.grid(row=0, column=1, rowspan=2, padx=10)
+        self.update(0.0, "", "")
+
+    def update(self, battery_percent: float, resolution: str, fps: str):
+        if battery_percent > 0.6:
+            self.battery_bar.configure(progress_color="green")
+        elif battery_percent > 0.2:
+            self.battery_bar.configure(progress_color="yellow")
+        else:
+            self.battery_bar.configure(progress_color="red")
+        self.battery_percent_text.\
+            configure(text=f"{int(battery_percent*100)}%")
+        try:
+            time =\
+                self.BATTERY_RECORDING_TIMES[resolution][fps] * battery_percent
+        except KeyError:
+            self.battery_time_text.configure( text="0 minutes")
+        else:
+            self.battery_time_text.configure( text=f"{time} minutes")
+        self.battery_bar.set(battery_percent)
 
 
 if __name__ == "__main__":
