@@ -79,11 +79,8 @@ class GoProApp(ctk.CTk):
         self.poll_battery.grid(row=2, column=0, padx=10, pady=10,
                                sticky="nsew")
         self.battery_indicator = BatteryIndicator(self)
-        self.battery_indicator.grid(row=2, column=1, columnspan=2,
+        self.battery_indicator.grid(row=2, column=1, columnspan=3,
                                     padx=10, pady=10, sticky="nsew")
-        # SD Card Remaining Time
-        self.sd_time_label = ctk.CTkLabel(self, text="0 minutes")
-        self.sd_time_label.grid(row=2, column=3, padx=10, pady=10)
         # Connection Button
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
@@ -304,9 +301,12 @@ class GoProApp(ctk.CTk):
     def poll_battery_callback(self):
         battery_percent_dict = self.gopro.ble_status.int_batt_per.get_value()
         battery_percent = list(battery_percent_dict.values())[0] / 100
+        time_remaining_dict = self.gopro.ble_status.video_rem.get_value().data
+        time_remaining = list(time_remaining_dict.values())[0]
         self.battery_indicator.update(battery_percent,
                                       self.resolution_dropdown.get(),
-                                      self.frame_rate_dropdown.get())
+                                      self.frame_rate_dropdown.get(),
+                                      time_remaining=time_remaining)
 
 
 class BatteryIndicator(ctk.CTkFrame):
@@ -347,16 +347,26 @@ class BatteryIndicator(ctk.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.configure(fg_color="transparent")
+        # Battery Percentage
         self.battery_percent_text = ctk.CTkLabel(self, text="")
         self.battery_percent_text.grid(row=0, column=0, sticky="nsew")
         self.battery_bar = ctk.CTkProgressBar(self, progress_color="green")
-        self.battery_bar.grid(row=1, column=0, sticky="nsew")
+        self.battery_bar.grid(row=1, column=0)
+        # Battery Life
+        self.battery_time_label = ctk.CTkLabel(self, text="Battery Life")
+        self.battery_time_label.grid(row=0, column=1, padx=10)
         self.battery_time_text = ctk.CTkLabel(self, text="0m")
-        self.battery_time_text.grid(row=0, column=1, rowspan=2, padx=10,
+        self.battery_time_text.grid(row=1, column=1, padx=10,
                                     sticky="nsew")
-        self.update(0.0, "", "")
+        # SD Card Remaining Time
+        self.sd_time_label = ctk.CTkLabel(self, text="Time Remaining on Card")
+        self.sd_time_label.grid(row=0, column=2, padx=10)
+        self.sd_time_text = ctk.CTkLabel(self, text="0 minutes")
+        self.sd_time_text.grid(row=1, column=2, padx=10, sticky="nsew")
+        self.update(0.0, "", "", 0)
 
-    def update(self, battery_percent: float, resolution: str, fps: str):
+    def update(self, battery_percent: float, resolution: str, fps: str,
+               time_remaining: int):
         if battery_percent > 0.6:
             self.battery_bar.configure(progress_color="green")
         elif battery_percent > 0.2:
@@ -375,6 +385,11 @@ class BatteryIndicator(ctk.CTkFrame):
             seconds = round(time % 1 * 60)
             self.battery_time_text.configure(text=f"{minutes}m {seconds}s")
         self.battery_bar.set(battery_percent)
+
+        hours, minutes, seconds =\
+            str(dt.timedelta(seconds=time_remaining)).split(":")
+        time_on_card = (f"{hours}h {minutes}m {seconds}s")
+        self.sd_time_text.configure(text=time_on_card)
 
 
 if __name__ == "__main__":
