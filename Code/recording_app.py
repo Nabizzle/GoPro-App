@@ -177,7 +177,7 @@ class GoProApp(ctk.CTk):
                                    sticky="nsew")
         self.save_files_button = ctk.CTkButton(self, text="Save Out Files",
                                                command=self.save_files,
-                                               state="enabled")
+                                               state="disabled")
         self.save_files_button.grid(row=3, column=2, padx=self.PADX,
                                     pady=self.PADY, sticky="nsew")
         self.stamp_check = ctk.StringVar(value="off")
@@ -541,17 +541,18 @@ class GoProApp(ctk.CTk):
                                 message="GoPro Connected")
             self.gopro.ble_command.load_preset_group(
                 group=Params.PresetGroup.VIDEO)
-            self.connect._state = "disabled"
+            self.connect.configure(state="disabled")
+            self.gopro_list.configure(state="disabled")
             self.set_resolution(self.resolution_dropdown.get())
             self.set_frame_rate(self.frame_rate_dropdown.get())
             self.set_fov(self.fov_dropdown.get())
-            self.frame_rate_dropdown.configure(state="enabled")
-            self.resolution_dropdown.configure(state="enabled")
-            self.fov_dropdown.configure(state="enabled")
-            self.recording_switch.configure(state="enabled")
-            self.photo_button.configure(state="enabled")
-            self.poll_battery.configure(state="enabled")
-            self.start_cam_button.configure(state="enabled")
+            self.frame_rate_dropdown.configure(state="normal")
+            self.resolution_dropdown.configure(state="normal")
+            self.fov_dropdown.configure(state="normal")
+            self.recording_switch.configure(state="normal")
+            self.photo_button.configure(state="normal")
+            self.poll_battery.configure(state="normal")
+            self.save_files_button.configure(state="normal")
             self.poll_battery_callback()
         else:
             messagebox.showerror(title="Failed to Connect",
