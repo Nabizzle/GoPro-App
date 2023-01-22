@@ -14,7 +14,7 @@ class GoProApp(ctk.CTk):
         self.title("GoPro Control App")
         self.config(padx=10, pady=10)
         # Drop Down Menus
-        default_resolution = ctk.StringVar(value="Select Resolution")
+        default_resolution = ctk.StringVar(value="1080p")
         self.resolution_dropdown = ctk.CTkOptionMenu(
             self, values=["1080p", "2.7K", "2.7K (4x3)", "4K",
                           "4K (4x3)", "5K (4x3)", "5.3K"],
@@ -22,7 +22,7 @@ class GoProApp(ctk.CTk):
             state="disabled")
         self.resolution_dropdown.grid(row=0, column=0, padx=10, pady=10)
 
-        default_frame_rate = ctk.StringVar(value="Select Frame Rate")
+        default_frame_rate = ctk.StringVar(value="30 fps")
         self.frame_rate_dropdown = ctk.CTkOptionMenu(
             self, values=["24 fps", "30 fps", "60 fps" "120 fps", "240 fps"],
             command=self.set_frame_rate, variable=default_frame_rate,
@@ -152,12 +152,16 @@ class GoProApp(ctk.CTk):
 
         if self.gopro.is_ble_connected:
             print("GoPro Connected")
+            self.gopro.ble_command.load_preset_group(
+                group=Params.PresetGroup.VIDEO)
             self.connect._state = "disabled"
+            self.set_resolution(self.resolution_dropdown.get())
+            self.set_frame_rate(self.frame_rate_dropdown.get())
             self.frame_rate_dropdown.configure(state="enabled")
             self.resolution_dropdown.configure(state="enabled")
             self.recording_switch.configure(state="enabled")
             self.poll_battery.configure(state="enabled")
-            self.battery_indicator.update(0.0, "", "")
+            self.poll_battery_callback()
         else:
             print("The GoPro did not connect")
 
@@ -172,6 +176,8 @@ class GoProApp(ctk.CTk):
 
     def recording_switch_event(self):
         if self.recording_variable.get() == "on":
+            self.gopro.ble_command.load_preset_group(
+                group=Params.PresetGroup.VIDEO)
             self.recording_switch.configure(text="Recording",
                                             button_color="red")
             self.gopro.ble_command.set_shutter(shutter=Params.Toggle.ENABLE)
@@ -247,9 +253,11 @@ class BatteryIndicator(ctk.CTkFrame):
             time =\
                 self.BATTERY_RECORDING_TIMES[resolution][fps] * battery_percent
         except KeyError:
-            self.battery_time_text.configure( text="0 minutes")
+            self.battery_time_text.configure(text="0 minutes")
         else:
-            self.battery_time_text.configure( text=f"{time} minutes")
+            minutes = int(time // 1)
+            seconds = round(time % 1 * 60)
+            self.battery_time_text.configure(text=f"{minutes}m {seconds}s")
         self.battery_bar.set(battery_percent)
 
 
