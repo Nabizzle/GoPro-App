@@ -35,6 +35,8 @@ class GoProApp(ctk.CTk):
         A list of possible frame rates for the GoPro
     fov_dropdown: CTkOptionMenu
         A list of possible fields of view for the GoPro
+    theme_dropdown: CTkOptionMenu
+        A menu to change between app themes
     recording_variable: StringVar
         Value of the recording switch
     recording_switch: CTkSwitch
@@ -72,6 +74,8 @@ class GoProApp(ctk.CTk):
         Switches the GoPro to a selected frame rate
     set_fov(choice)
         Switches the GoPro to a field of view
+    switch_theme(choice)
+        Takes theme choice from theme_dropdown and applies it
     take_photo()
         Take an image with the current settings
     save_files()
@@ -152,6 +156,14 @@ class GoProApp(ctk.CTk):
             command=self.set_fov, state="disabled")
         self.fov_dropdown.grid(row=0, column=2, padx=self.PADX, pady=self.PADY,
                                sticky="nsew")
+
+        # Theme Menu
+        default_theme = ctk.StringVar(value="Select Theme")
+        self.theme_dropdown = ctk.CTkOptionMenu(
+            self, values=["System", "Dark", "Light"], variable=default_theme,
+            command=self.switch_theme)
+        self.theme_dropdown.grid(row=0, column=3, padx=self.PADX,
+                                 pady=self.PADY)
 
         # Recording Switch
         self.recording_variable = ctk.StringVar(value="off")
@@ -419,6 +431,22 @@ class GoProApp(ctk.CTk):
                 messagebox.showerror(title="Unknown FOV",
                                      message="This FOV is not available")
                 raise KeyError
+
+    def switch_theme(self, choice: str) -> None:
+        '''
+        Takes theme choice from theme_dropdown and applies it
+
+        Parameters
+        ----------
+        choice: str
+            The name of the theme
+
+        Notes
+        -----
+        The choice needs to be exactly the name of the theme or else this will
+        not work.
+        '''
+        ctk.set_appearance_mode(choice)
 
     def take_photo(self) -> None:
         '''
