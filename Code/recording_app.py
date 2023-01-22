@@ -11,7 +11,7 @@ class GoProApp(ctk.CTk):
         super().__init__()
         self.gopro_name = "GoPro 5990"
         self.gopro = WirelessGoPro(target=self.gopro_name)
-        # Global App Parameters
+        # Global App Parameters)
         self.title("GoPro Control App")
         self.config(padx=10, pady=10)
         # Drop Down Menus
