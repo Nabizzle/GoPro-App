@@ -36,22 +36,29 @@ class GoProApp(ctk.CTk):
             onvalue="on", offvalue="off", command=self.recording_switch_event,
             state="disabled", switch_width=50, switch_height=25)
         self.recording_switch.grid(row=0, column=2, padx=10, pady=10)
+        # Select FOV
+        default_fov = ctk.StringVar(value="Wide")
+        self.fov_selector = ctk.CTkOptionMenu(
+            self, values=["Linear", "Horizon Leveling", "Narrow",
+                          "Super View", "Wide"], variable=default_fov,
+            command=self.set_fov, state="disabled")
+        self.fov_selector.grid(row=1, column=0, padx=10, pady=10)
         # Battery Indicator
         self.poll_battery = ctk.CTkButton(
             self, text="Refresh Battery Indicator",
             command=self.poll_battery_callback, state="disabled")
-        self.poll_battery.grid(row=1, column=0, padx=10, pady=10)
+        self.poll_battery.grid(row=2, column=0, padx=10, pady=10)
         self.battery_indicator = BatteryIndicator(self)
-        self.battery_indicator.grid(row=1, column=1, columnspan=2)
+        self.battery_indicator.grid(row=2, column=1, columnspan=2)
         # Connection Button
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
-        self.connect.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
-        default_gopro_name = ctk.StringVar(value="5990")
+        self.connect.grid(row=3, column=1, columnspan=2, padx=10, pady=10)
+        default_gopro_name = ctk.StringVar(value="GoPro 5990")
         self.gopro_list = ctk.CTkOptionMenu(
-            self, values=["5990", "Connect to First"],
+            self, values=["GoPro 5990", "Connect to First"],
             command=self.select_gopro, variable=default_gopro_name)
-        self.gopro_list.grid(row=2, column=0, padx=10, pady=10)
+        self.gopro_list.grid(row=3, column=0, padx=10, pady=10)
 
     def set_resolution(self, choice):
         match choice:
@@ -155,6 +162,27 @@ class GoProApp(ctk.CTk):
 
         self.poll_battery_callback()
 
+    def set_fov(self, choice):
+        match choice:
+            case "Linear":
+                self.gopro.ble_setting.video_field_of_view.set(
+                    Params.VideoFOV.LINEAR)
+            case "Horizon Leveling":
+                self.gopro.ble_setting.video_field_of_view.set(
+                    Params.VideoFOV.LINEAR_HORIZON_LEVELING)
+            case "Narrow":
+                self.gopro.ble_setting.video_field_of_view.set(
+                    Params.VideoFOV.NARROW)
+            case "Super View":
+                self.gopro.ble_setting.video_field_of_view.set(
+                    Params.VideoFOV.SUPERVIEW)
+            case "Wide":
+                self.gopro.ble_setting.video_field_of_view.set(
+                    Params.VideoFOV.WIDE)
+            case _:
+                messagebox.showerror(title="Unknown FOV",
+                                     message="This FOV is not available")
+
     def connect_callback(self):
         answer = messagebox.askokcancel(
             title="Proceed?", message="Is the GoPro in pairing mode?")
@@ -173,8 +201,10 @@ class GoProApp(ctk.CTk):
             self.connect._state = "disabled"
             self.set_resolution(self.resolution_dropdown.get())
             self.set_frame_rate(self.frame_rate_dropdown.get())
+            self.set_fov(self.fov_selector.get())
             self.frame_rate_dropdown.configure(state="enabled")
             self.resolution_dropdown.configure(state="enabled")
+            self.fov_selector.configure(state="enabled")
             self.recording_switch.configure(state="enabled")
             self.poll_battery.configure(state="enabled")
             self.poll_battery_callback()
@@ -192,7 +222,7 @@ class GoProApp(ctk.CTk):
 
     def select_gopro(self, choice):
         match choice:
-            case "5990":
+            case "GoPro 5990":
                 self.gopro_name = "GoPro 5990"
             case _:
                 self.gopro_name = None
