@@ -179,16 +179,16 @@ class GoProApp(ctk.CTk):
             self.poll_battery.configure(state="enabled")
             self.poll_battery_callback()
         else:
-            print("The GoPro did not connect")
+            messagebox.showerror(title="Failed to Connect",
+                                 message="The GoPro did not connect")
 
     def close_callback(self):
         if self.gopro.is_ble_connected:
             self.gopro.close()
 
-        if not self.gopro.is_ble_connected:
-            print("GoPro Disconnected")
-        else:
-            print("The GoPro did not disconnect.")
+        if self.gopro.is_ble_connected:
+            messagebox.showerror(title="Failed to Disconnect",
+                                 message="The GoPro did not disconnect.")
 
     def select_gopro(self, choice):
         match choice:
