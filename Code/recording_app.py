@@ -8,8 +8,8 @@ ctk.set_default_color_theme("dark-blue")
 class GoProApp(ctk.CTk):
     def __init__(self) -> None:
         super().__init__()
-        # GoPro Variables
-        self.gopro = WirelessGoPro(target="GoPro 5990")
+        self.gopro_name = "GoPro 5990"
+        self.gopro = WirelessGoPro(target=self.gopro_name)
         # Global App Parameters
         self.title("GoPro Control App")
         self.config(padx=10, pady=10)
@@ -45,7 +45,12 @@ class GoProApp(ctk.CTk):
         # Connection Button
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
-        self.connect.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
+        self.connect.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
+        default_gopro_name = ctk.StringVar(value="5990")
+        self.gopro_list = ctk.CTkOptionMenu(
+            self, values=["5990", "Connect to First"],
+            command=self.select_gopro, variable=default_gopro_name)
+        self.gopro_list.grid(row=2, column=0, padx=10, pady=10)
 
     def set_resolution(self, choice):
         match choice:
@@ -108,7 +113,7 @@ class GoProApp(ctk.CTk):
                 self.set_frame_rate(self.frame_rate_dropdown.get())
             case _:
                 print("This is not an available resolution")
-            
+
         self.poll_battery_callback()
 
     def set_frame_rate(self, choice):
@@ -173,6 +178,15 @@ class GoProApp(ctk.CTk):
             print("GoPro Disconnected")
         else:
             print("The GoPro did not disconnect.")
+
+    def select_gopro(self, choice):
+        match choice:
+            case "5990":
+                self.gopro_name = "GoPro 5990"
+            case _:
+                self.gopro_name = None
+
+        self.gopro = WirelessGoPro(target=self.gopro_name)
 
     def recording_switch_event(self):
         if self.recording_variable.get() == "on":
