@@ -63,6 +63,7 @@ When connecting to a GoPro, open the GoPro to its page for pairing to the Quik a
 
 In order to get to this option, swip down from the top on the rear screen of the GoPro, then swipe right to left and click on the **Connections** option. On this 
 screen select connect device and select the GoPro Quik App. When this is done you should see this screen.
+
 ![Quik App Pairing Screen](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Quik%20App%20Pairing%20Screen.png)
 
 If you have not already done so, open the app.
@@ -186,8 +187,8 @@ setting, you will need to poll the GoPro for they values your self with the "Ref
 # Requirements
 - [Python 3.10.0](https://www.python.org/downloads/release/python-3109/)
   - Python 3.11 is not supported currently by Open GoPro
-- [customtkinter version: 5.0.4](https://pypi.org/project/customtkinter/0.3/)
-- [open-gopro 0.12.0](https://community.gopro.com/s/article/Welcome-To-Open-GoPro?language=en_US)
+- [customtkinter version: 5.0.4](https://pypi.org/project/customtkinter/0.3/) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/PyPi/customtkinter/5.0.4)
+- [open-gopro 0.12.0](https://community.gopro.com/s/article/Welcome-To-Open-GoPro?language=en_US) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/PyPi/open-gopro/0.12.0)
 
 # Important Note on HIPAA Conpliance
 > **Warning**
