@@ -13,7 +13,7 @@ This project uses the [Open GoPro SDK](https://gopro.github.io/OpenGoPro/python_
 > This product and/or service is not affiliated with, endorsed by or in any way associated with GoPro Inc. or its products and services. GoPro, HERO, and their 
 > respective logos are trademarks or registered trademarks of GoPro, Inc.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/iSensTeam/GoPro-App/blob/main/LICENSE)
 ![GitHub followers](https://img.shields.io/github/followers/Nabizzle?style=social)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/open-gopro)
 
