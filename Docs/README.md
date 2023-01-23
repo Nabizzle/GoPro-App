@@ -39,6 +39,11 @@ right of the app. This app was designed in dark mode so it is preferred asthetic
 8. **Refresh Battery Indicator Button**: Polls the GoPro for an updated estimate of battery life and SD card recording room
 9. **Battery and SD Card Status Indicators**: Shows the battery life and room left on the SD card
    - These values will change based on the selected resolution and frame rate
+   - Battery life is shown as a time and as a colored bar for high, medium and low battery
+   
+   ![High Battery](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Battery%20High.png)
+   ![Medium Battery](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Battery%20Medium.png)
+   ![Low Battery](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Battery%20Low.png)
 10. **GoPro selector**: Dropdown menu for selecting which GoPro to connect to
     - If your GoPro is not listed, you can select the ability to connect to the first available GoPro
 11. **Connection Button**: Button to start the connection to the GoPro
