@@ -19,7 +19,7 @@ This project uses the [Open GoPro SDK](https://gopro.github.io/OpenGoPro/python_
 
 # App Description
 The app is available in both a dark and light mode version shown below. The app will default to your system theme, but there is also a theme switcher in the upper
-right of the app. This app was designed in dark mode so it is preferred asthetically, but there is no functional difference between the themes.
+right of the app. This app was designed in dark mode so it is preferred aesthetically, but there is no functional difference between the themes.
 
 ![Dark Mode App](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/App%20Darkmode.png)
 ![Light Mode App](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/App%20Lightmode.png)
@@ -31,10 +31,10 @@ right of the app. This app was designed in dark mode so it is preferred asthetic
    - Note that not all frame rates are possible at a given resolution
 2. **Frame Rate Selector**: Allows the user to select between the available frame rates for a given resolution on the GoPro
 3. **Field of View Selector**: Allows the user to select between the field of view options on the GoPro
-4. **Theme Selector**: Allows the user to select between the sytem defualt theme, a dark theme, and a light theme for the app
-5. **Video Recording Switch**: A swithc to start and stop a video recording on the GoPro
+4. **Theme Selector**: Allows the user to select between the system default theme, a dark theme, and a light theme for the app
+5. **Video Recording Switch**: A switch to start and stop a video recording on the GoPro
 6. **Photo Button**: Switches to photo mode, takes a photo, and returns to video mode
-7. **Directory Name**: The name of a user defined subdirectory in the Data folder of the respository
+7. **Directory Name**: The name of a user defined subdirectory in the Data folder of the repository
    - If you don't have a Data folder, the app generates one when it is opened
 8. **Refresh Battery Indicator Button**: Polls the GoPro for an updated estimate of battery life and SD card recording room
 9. **Battery and SD Card Status Indicators**: Shows the battery life and room left on the SD card
@@ -48,7 +48,7 @@ right of the app. This app was designed in dark mode so it is preferred asthetic
     - If your GoPro is not listed, you can select the ability to connect to the first available GoPro
 11. **Connection Button**: Button to start the connection to the GoPro
 12. **File Transfer Button**: When clicked, all new files are saved into the user defined subdirectory from GUI element 7
-13. **Timestamp Checkbox**: When checked, a timestamp for when the files were saved is added to the begining of all transfered files in the format of 
+13. **Timestamp Checkbox**: When checked, a timestamp for when the files were saved is added to the beginning of all transferred files in the format of 
 YYYYMMDD_HHMMSS_"GoPro file name"
 
 > **Note**
@@ -61,7 +61,7 @@ When connecting to a GoPro, open the GoPro to its page for pairing to the Quik a
 > **Warning**
 > **Make sure you do not select connecting to a remote.**
 
-In order to get to this option, swip down from the top on the rear screen of the GoPro, then swipe right to left and click on the **Connections** option. On this 
+In order to get to this option, swipe down from the top on the rear screen of the GoPro, then swipe right to left and click on the **Connections** option. On this 
 screen select connect device and select the GoPro Quik App. When this is done you should see this screen.
 
 ![Quik App Pairing Screen](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Quik%20App%20Pairing%20Screen.png)
@@ -69,8 +69,8 @@ screen select connect device and select the GoPro Quik App. When this is done yo
 If you have not already done so, open the app.
 > **Note**
 >
-> In this state, one the theme switcher, GoPro selctor, and connection button should be functional. This is to prevent you from sending commands before the GoPro is
-> connected to.
+> In this state, one the theme switcher, GoPro selector, and connection button should be functional. This is to prevent you from sending commands before the GoPro
+> is connected to.
 
 Press the "Open Connection" button. When you have done this, the following prompt will appear.
 
@@ -79,7 +79,7 @@ Press the "Open Connection" button. When you have done this, the following promp
 If you forgot to start pairing, you can start it now or press cancel. If you press ok, the code will connect to the GoPro
 > **Warning**
 >
-> The GoPro will say it is connected before the code has finished connecting. Make sure the code confirms the connection has occured when the following message
+> The GoPro will say it is connected before the code has finished connecting. Make sure the code confirms the connection has occurred when the following message
 > appears.
 
 ![Connection Confirmation](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Connection%20Confirmation.png)
@@ -88,9 +88,9 @@ Once the connection is confirmed, press ok and the GoPro is default to the lowes
 have to manually refresh them after this, but they will auto refresh when resolution and frame rate change.
 
 ## Troubleshooting the Connection
-The GoPro will not always connect correctly when the connection is opened in the app even if the GoPro says the connection occured. This is because the GoPro will
+The GoPro will not always connect correctly when the connection is opened in the app even if the GoPro says the connection occurred. This is because the GoPro will
 confirm early in the connection process, but the full connection requires a bluetooth and wifi connection to the GoPro. If the connection confirmation appears, then
-you know the connection occured correctly. If not, then try the following:
+you know the connection occurred correctly. If not, then try the following:
 
 1. Retry pairing form the beginning
 2. Restart the app and then pairing
@@ -100,7 +100,7 @@ you know the connection occured correctly. If not, then try the following:
 # Using the App
 After the app is connected to a GoPro, all of the settings widgets will become active and allow you to change the settings. When you change the resolution, the list of
 frame rate options will change based on what that resolution can do. If the frame rate you want is not available at that resolution, you will likely need to change the
-resolition. Refer to the [battery life table](#battery-life-table) below for a list of all possible resolution and frame rate combinations. The FOV values should have
+resolution. Refer to the [battery life table](#battery-life-table) below for a list of all possible resolution and frame rate combinations. The FOV values should have
 no effect on the resolution or frame rate options so they should all be available at any time.
 
 > **Note**
@@ -184,13 +184,45 @@ setting, you will need to poll the GoPro for they values your self with the "Ref
     </tbody>
 </table>
 
+# Converting the App to an Executable
+If you would like to use the app on another computer that does not have python, you can convert the app into an executable. This is done by using the pyinstaller package. Unfortunately,
+pyinstaller has difficulty finding all of the files for customtkinter, the package used to make the GUI, when using the --onefile option so you need to add the data directly using the
+--add-data option. Follow these steps to make the executable
+1. Find the location of customtkinter on your computer. You can do this by entering
+   `pip show customtkinter` in the terminal.
+   - It will likely be in the form of `C:/Users/<username>/Lib/site-packages`
+2. Enter the call to pyinstaller using the following: `pyinstaller --noconfirm --onedir --windowed --add-data "<customtkinter location>/customtkinter;customtkinter/" <recording_app.py location>`
+  - if you want to also include the icon, you can add the option `--icon="<repository location>/GoPro-App/Docs/Media/film-roll.ico"`
+3. This will make a build and dist folder in your current directory.
+   - I ran this code when in the Code folder and committed my current version of the dist folder
+4. The dist folder contains your new .exe file in the recording app folder. It will 
+   have the same name as the python app.
+   > **Note**
+   >
+   > When running the .exe, it will make a Data folder in the directory right above
+   > it in the dist folder. If you move the .exe it would likely make it in whatever
+   > directory was right above its new location. You should probably not move the 
+   > exe as the full directory of packages in the recording_app folder will be
+   > needed.
+5. If you would like a shortcut you can put anywhere, right click on the .exe and
+   select the option to make a shortcut. This will make a shortcut in the current
+   folder.
+   - If you want to change the icon to the same icon as the app, go to the properties
+     of the shortcut and select the change icon button in the shortcut tab. Select 
+     your new icon from there
+
+![Shortcut Icon Change](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Icon%20Change.png)
+
 # Requirements
 - [Python 3.10.0](https://www.python.org/downloads/release/python-3109/)
   - Python 3.11 is not supported currently by Open GoPro
 - [customtkinter version: 5.0.4](https://pypi.org/project/customtkinter/0.3/) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/PyPi/customtkinter/5.0.4)
 - [open-gopro 0.12.0](https://community.gopro.com/s/article/Welcome-To-Open-GoPro?language=en_US) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/PyPi/open-gopro/0.12.0)
 
-# Important Note on HIPAA Conpliance
+## Executable Generation Requirements
+- [pyinstaller version 5.7.0](https://pyinstaller.org/en/stable/installation.html) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/pypi/pyinstaller/5.7.0)
+
+# Important Note on HIPAA Compliance
 > **Warning**
 >
 > For its intended purpose, this app is made to record videos of a participant which is *Protected Data**. In order to be allowed to use this app to record a
