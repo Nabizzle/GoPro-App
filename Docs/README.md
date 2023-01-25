@@ -232,7 +232,7 @@ pyinstaller has difficulty finding all of the files for customtkinter, the packa
 >
 > For its intended purpose, this app is made to record videos of a participant which is **Protected Data**. In order to be allowed to use this app to record a
 > participant either in the operating room or in the lab during experiments, you **must use a VA approved device** to run the app. If this is not possible, you must
-> disable the button to save video files on your local device running the app. For all questions relating to HIPAA comliance, refer to the Clinical and Regulatory 
+> disable the button to save video files on your local device running the app. For all questions relating to HIPAA compliance, refer to the Clinical and Regulatory 
 > staff for what is and is not allowed when interacting with participants.
 
 # Author
