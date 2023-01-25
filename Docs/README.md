@@ -100,7 +100,8 @@ you know the connection occurred correctly. If not, then try the following:
 1. Retry pairing form the beginning
 2. Restart the app and then pairing
 3. Turn the GoPro on and off
-4. Make sure you are using a python version at or above 3.10, but before 3.11
+4. Reset the connections in the connections menu
+5. Make sure you are using a python version at or above 3.10, but before 3.11
 
 # Using the App
 After the app is connected to a GoPro, all of the settings widgets will become active and allow you to change the settings. When you change the resolution, the list of
@@ -196,8 +197,10 @@ pyinstaller has difficulty finding all of the files for customtkinter, the packa
 1. Find the location of customtkinter on your computer. You can do this by entering
    `pip show customtkinter` in the terminal.
    - It will likely be in the form of `C:/Users/<username>/Lib/site-packages`
+   - If you are using a virtual environment, make sure it is part of the file path
 2. Enter the call to pyinstaller using the following: `pyinstaller --noconfirm --onedir --windowed --add-data "<customtkinter location>/customtkinter;customtkinter/" <recording_app.py location>`
-  - if you want to also include the icon, you can add the option `--icon="<repository location>/GoPro-App/Docs/Media/film-roll.ico"`
+  - If you want to also include the icon, you can add the option `--icon="<repository location>/GoPro-App/Docs/Media/film-roll.ico"`
+  - If you want to change the name of the app, add the option '--name <new app name>`
 3. This will make a build and dist folder in your current directory.
    - I ran this code when in the Code folder and committed my current version of the dist folder
 4. The dist folder contains your new .exe file in the recording app folder. It will 
