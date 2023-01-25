@@ -14,8 +14,8 @@ This project uses the [Open GoPro SDK](https://gopro.github.io/OpenGoPro/python_
 > respective logos are trademarks or registered trademarks of GoPro, Inc.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/iSensTeam/GoPro-App/blob/main/LICENSE)
-![GitHub followers](https://img.shields.io/github/followers/Nabizzle?style=social)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/open-gopro)
+[![GitHub followers](https://img.shields.io/github/followers/Nabizzle?style=social)](https://github.com/Nabizzle)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/open-gopro)](https://www.python.org/downloads/release/python-3109/)
 
 # App Description
 The app is available in both a dark and light mode version shown below. The app will default to your system theme, but there is also a theme switcher in the upper
@@ -216,18 +216,19 @@ pyinstaller has difficulty finding all of the files for customtkinter, the packa
 # Requirements
 - [Python 3.10.0](https://www.python.org/downloads/release/python-3109/)
   - Python 3.11 is not supported currently by Open GoPro
-- [customtkinter version: 5.0.4](https://pypi.org/project/customtkinter/0.3/) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/PyPi/customtkinter/5.0.4)
-- [open-gopro 0.12.0](https://community.gopro.com/s/article/Welcome-To-Open-GoPro?language=en_US) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/PyPi/open-gopro/0.12.0)
+- [customtkinter version: 5.0.4](https://pypi.org/project/customtkinter/0.3/) ![dependency check for customtkinter](https://img.shields.io/librariesio/release/PyPi/customtkinter/5.0.4)
+- [open-gopro 0.12.0](https://community.gopro.com/s/article/Welcome-To-Open-GoPro?language=en_US) ![dependency check for open-gopro](https://img.shields.io/librariesio/release/PyPi/open-gopro/0.12.0)
 
 ## Executable Generation Requirements
-- [pyinstaller version 5.7.0](https://pyinstaller.org/en/stable/installation.html) ![Libraries.io dependency status for specific release](https://img.shields.io/librariesio/release/pypi/pyinstaller/5.7.0)
+- [pyinstaller version 5.7.0](https://pyinstaller.org/en/stable/installation.html) ![dependency check for pyinstaller](https://img.shields.io/librariesio/release/pypi/pyinstaller/5.7.0)
 
 # Important Note on HIPAA Compliance
 > **Warning**
 >
-> For its intended purpose, this app is made to record videos of a participant which is *Protected Data**. In order to be allowed to use this app to record a
-participant either in the operating room or in the lab during experiments, you **must use a VA approved device** to run the app. If this is not possible, you must
-disable the button to save video files on your local device running the app.
+> For its intended purpose, this app is made to record videos of a participant which is **Protected Data**. In order to be allowed to use this app to record a
+> participant either in the operating room or in the lab during experiments, you **must use a VA approved device** to run the app. If this is not possible, you must
+> disable the button to save video files on your local device running the app. For all questions relating to HIPAA comliance, refer to the Clinical and Regulatory 
+> staff for what is and is not allowed when interacting with participants.
 
 # Author
 Code written by [Nabeel Chowdhury](https://www.nabeelchowdhury.com/)
