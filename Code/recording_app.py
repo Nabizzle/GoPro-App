@@ -223,7 +223,8 @@ class GoProApp(ctk.CTk):
                           sticky="nsew")
         default_gopro_name = ctk.StringVar(value="GoPro 5990")
         self.gopro_list = ctk.CTkOptionMenu(
-            self, values=["GoPro 5990", "Connect to First Available"],
+            self, values=["GoPro 5990", "GoPro 8194",
+                          "Connect to First Available"],
             command=self.select_gopro, variable=default_gopro_name)
         self.gopro_list.grid(row=3, column=0, padx=self.PADX, pady=self.PADY,
                              sticky="nsew")
