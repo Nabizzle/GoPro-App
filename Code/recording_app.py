@@ -58,6 +58,10 @@ class GoProApp(ctk.CTk):
         A button to get the battery life and SD card recording room values
     battery_indicator: BatteryIndicator
         The GUI elements to display the battery and SD card statuses
+    zoom_label: CTkLabel
+        label of teh digital zoom slider
+    zoom_slider: CTkSlider
+        slider for the percent of digital zoom
     connect: CTkButton
         A button to connect to the selected GoPro
     gopro_list: List[str]
@@ -80,6 +84,8 @@ class GoProApp(ctk.CTk):
         Take an image with the current settings
     save_files()
         Save out new files from the GoPro
+    set_zoom()
+        Set the percent of digital zoom on the camera
     select_gopro(choice)
         Select a GoPro to connect to
     connect_callback()
@@ -217,8 +223,8 @@ class GoProApp(ctk.CTk):
                                     sticky="nsew")
         
         # set zoom level
-        zoom_label = ctk.CTkLabel(self, text="Digital Zoom")
-        zoom_label.grid(row=3, column=0, padx=self.PADX, pady=self.PADY)
+        self.zoom_label = ctk.CTkLabel(self, text="Digital Zoom")
+        self.zoom_label.grid(row=3, column=0, padx=self.PADX, pady=self.PADY)
         default_zoom = ctk.IntVar(value=0)
         self.zoom_slider = ctk.CTkSlider(self, from_=0, to=100,
                                          number_of_steps=101,
@@ -226,6 +232,7 @@ class GoProApp(ctk.CTk):
                                          variable=default_zoom)
         self.zoom_slider.grid(row=3, column=1, columnspan=3, padx=self.PADX,
                               pady=self.PADY, sticky="ew")
+        self.set_zoom(0)
 
         # Connecting to the GoPro
         self.connect = ctk.CTkButton(self, text="Open Connection",
@@ -514,7 +521,18 @@ class GoProApp(ctk.CTk):
                                                       local_file=local_file)
                 self.previously_saved_files.append(file)
 
-    def set_zoom(self, value):
+    def set_zoom(self, value: int) -> None:
+        '''
+        Set the percent of digital zoom on the camera
+
+        Takes in a slider value and converts that into the percent of digital
+        zoom on the GoPro
+
+        Parameters
+        ----------
+        value: int
+            The slider value from the zoom_slider
+        '''
         self.gopro.http_command.set_digital_zoom(percent=int(value))
 
     def select_gopro(self, choice: str) -> None:
