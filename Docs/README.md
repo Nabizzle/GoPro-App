@@ -44,11 +44,16 @@ right of the app. This app was designed in dark mode so it is preferred aestheti
    ![High Battery](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Battery%20High.png)
    ![Medium Battery](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Battery%20Medium.png)
    ![Low Battery](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Battery%20Low.png)
-10. **GoPro selector**: Dropdown menu for selecting which GoPro to connect to
+10. **Digital Zoom Slider**: Allows you to give the GoPro a digital zoom.
+    > **Note**
+    >
+    > The motion of zooming with the slider is choppy due to the frequency of sending the commands at a low rate
+
+11. **GoPro selector**: Dropdown menu for selecting which GoPro to connect to
     - If your GoPro is not listed, you can select the ability to connect to the first available GoPro
-11. **Connection Button**: Button to start the connection to the GoPro
-12. **File Transfer Button**: When clicked, all new files are saved into the user defined subdirectory from GUI element 7
-13. **Timestamp Checkbox**: When checked, a timestamp for when the files were saved is added to the beginning of all transferred files in the format of 
+12. **Connection Button**: Button to start the connection to the GoPro
+13. **File Transfer Button**: When clicked, all new files are saved into the user defined subdirectory from GUI element 7
+14. **Timestamp Checkbox**: When checked, a timestamp for when the files were saved is added to the beginning of all transferred files in the format of 
 YYYYMMDD_HHMMSS_"GoPro file name"
 
 > **Note**
@@ -231,7 +236,7 @@ pyinstaller has difficulty finding all of the files for customtkinter, the packa
 > staff for what is and is not allowed when interacting with participants.
 
 # Author
-Code written by [Nabeel Chowdhury](https://www.nabeelchowdhury.com/)
+Code and documentation written by [Nabeel Chowdhury](https://www.nabeelchowdhury.com/)
 
 # Acknowledgements
 App icon from: <a href="https://www.flaticon.com/free-icons/analog" title="analog icons">Analog icons created by juicy_fish - Flaticon</a>
