@@ -49,6 +49,11 @@ right of the app. This app was designed in dark mode so it is preferred aestheti
     >
     > The motion of zooming with the slider is choppy due to the frequency of sending the commands at a low rate
 
+    > **Warning**
+    >
+    > Do not zoom while taking a video. This GoPro is not capable of doing both at the same time and the app will keep trying to zoom unsuccessfully which will block
+    > all other commands until the video is manually stopped by hitting the button ont he GoPro.
+
 11. **GoPro selector**: Dropdown menu for selecting which GoPro to connect to
     - If your GoPro is not listed, you can select the ability to connect to the first available GoPro
 12. **Connection Button**: Button to start the connection to the GoPro
