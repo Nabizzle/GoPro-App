@@ -71,10 +71,10 @@ screen select connect device and select the GoPro Quik App. When this is done yo
 
 ![Quik App Pairing Screen](https://github.com/iSensTeam/GoPro-App/blob/main/Docs/Media/Quik%20App%20Pairing%20Screen.png)
 
-If you have not already done so, open the app.
+If you have not already done so, open the app and select the correct GoPro from the drop down in the lower left. The number of the GoPro is written on the top in silver marker.
 > **Note**
 >
-> In this state, one the theme switcher, GoPro selector, and connection button should be functional. This is to prevent you from sending commands before the GoPro
+> In this state, only the theme switcher, GoPro selector, and connection button should be functional. This is to prevent you from sending commands before the GoPro
 > is connected to.
 
 Press the "Open Connection" button. When you have done this, the following prompt will appear.
