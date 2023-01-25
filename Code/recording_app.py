@@ -190,13 +190,13 @@ class GoProApp(ctk.CTk):
         self.save_files_button = ctk.CTkButton(self, text="Save Out Files",
                                                command=self.save_files,
                                                state="disabled")
-        self.save_files_button.grid(row=3, column=2, padx=self.PADX,
+        self.save_files_button.grid(row=4, column=2, padx=self.PADX,
                                     pady=self.PADY, sticky="nsew")
         self.stamp_check = ctk.StringVar(value="off")
         self.timestamp_check = ctk.CTkCheckBox(self, text="Timestamp Save?",
                                                variable=self.stamp_check,
                                                onvalue="on", offvalue="off")
-        self.timestamp_check.grid(row=3, column=3, padx=self.PADX,
+        self.timestamp_check.grid(row=4, column=3, padx=self.PADX,
                                   pady=self.PADY)
         if not os.path.exists("../Data"):
             os.makedirs("../Data")
@@ -215,18 +215,29 @@ class GoProApp(ctk.CTk):
         self.battery_indicator.grid(row=2, column=1, columnspan=3,
                                     padx=self.PADX, pady=self.PADY,
                                     sticky="nsew")
+        
+        # set zoom level
+        zoom_label = ctk.CTkLabel(self, text="Digital Zoom")
+        zoom_label.grid(row=3, column=0, padx=self.PADX, pady=self.PADY)
+        default_zoom = ctk.IntVar(value=0)
+        self.zoom_slider = ctk.CTkSlider(self, from_=0, to=100,
+                                         number_of_steps=101,
+                                         command=self.set_zoom,
+                                         variable=default_zoom)
+        self.zoom_slider.grid(row=3, column=1, columnspan=3, padx=self.PADX,
+                              pady=self.PADY, sticky="ew")
 
         # Connecting to the GoPro
         self.connect = ctk.CTkButton(self, text="Open Connection",
                                      command=self.connect_callback)
-        self.connect.grid(row=3, column=1, padx=self.PADX, pady=self.PADY,
+        self.connect.grid(row=4, column=1, padx=self.PADX, pady=self.PADY,
                           sticky="nsew")
         default_gopro_name = ctk.StringVar(value="GoPro 5990")
         self.gopro_list = ctk.CTkOptionMenu(
             self, values=["GoPro 5990", "GoPro 8194",
                           "Connect to First Available"],
             command=self.select_gopro, variable=default_gopro_name)
-        self.gopro_list.grid(row=3, column=0, padx=self.PADX, pady=self.PADY,
+        self.gopro_list.grid(row=4, column=0, padx=self.PADX, pady=self.PADY,
                              sticky="nsew")
 
     def set_resolution(self, choice: str) -> None:
@@ -502,6 +513,9 @@ class GoProApp(ctk.CTk):
                 self.gopro.http_command.download_file(camera_file=file,
                                                       local_file=local_file)
                 self.previously_saved_files.append(file)
+
+    def set_zoom(self, value):
+        self.gopro.http_command.set_digital_zoom(percent=int(value))
 
     def select_gopro(self, choice: str) -> None:
         '''
