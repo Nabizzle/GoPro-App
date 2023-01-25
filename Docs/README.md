@@ -200,7 +200,7 @@ pyinstaller has difficulty finding all of the files for customtkinter, the packa
    - If you are using a virtual environment, make sure it is part of the file path
 2. Enter the call to pyinstaller using the following: `pyinstaller --noconfirm --onedir --windowed --add-data "<customtkinter location>/customtkinter;customtkinter/" <recording_app.py location>`
   - If you want to also include the icon, you can add the option `--icon="<repository location>/GoPro-App/Docs/Media/film-roll.ico"`
-  - If you want to change the name of the app, add the option '--name <new app name>`
+  - If you want to change the name of the app, add the option `--name <new app name>`
 3. This will make a build and dist folder in your current directory.
    - I ran this code when in the Code folder and committed my current version of the dist folder
 4. The dist folder contains your new .exe file in the recording app folder. It will 
