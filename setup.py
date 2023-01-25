@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="GoPro App",
-    version="1.2.0",
+    version="1.2.1",
     author="Nabeel Chowdhury",
     author_email="nabeel.chowdhury@case.edu",
     py_modules=["GoPro App"],
