@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="GoPro App",
-    version="1.0.0",
+    version="1.2.0",
     py_modules=["GoPro App"],
     description="App to control the video from a GoPro",
     long_description='''Application to set video parameters and to start and
