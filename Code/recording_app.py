@@ -118,6 +118,8 @@ class GoProApp(ctk.CTk):
     '''
     PADX = 10
     PADY = 10
+    LABEL_FONT = ("Inter", 20)
+    WIDGET_FONT = ("Inter", 16)
 
     def __init__(self) -> None:
         '''
@@ -141,7 +143,7 @@ class GoProApp(ctk.CTk):
             self, values=["1080p", "2.7K", "2.7K (4x3)", "4K",
                           "4K (4x3)", "5K (4x3)", "5.3K"],
             command=self.set_resolution, variable=default_resolution,
-            state="disabled")
+            state="disabled", font=self.WIDGET_FONT)
         self.resolution_dropdown.grid(row=0, column=0, padx=self.PADX,
                                       pady=self.PADY, sticky="nsew")
 
@@ -150,7 +152,7 @@ class GoProApp(ctk.CTk):
         self.frame_rate_dropdown = ctk.CTkOptionMenu(
             self, values=["24 fps", "30 fps", "60 fps" "120 fps", "240 fps"],
             command=self.set_frame_rate, variable=default_frame_rate,
-            state="disabled")
+            state="disabled", font=self.WIDGET_FONT)
         self.frame_rate_dropdown.grid(row=0, column=1, padx=self.PADX,
                                       pady=self.PADY, sticky="nsew")
 
@@ -159,7 +161,7 @@ class GoProApp(ctk.CTk):
         self.fov_dropdown = ctk.CTkOptionMenu(
             self, values=["Linear", "Horizon Leveling", "Narrow",
                           "Super View", "Wide"], variable=default_fov,
-            command=self.set_fov, state="disabled")
+            command=self.set_fov, state="disabled", font=self.WIDGET_FONT)
         self.fov_dropdown.grid(row=0, column=2, padx=self.PADX, pady=self.PADY,
                                sticky="nsew")
 
@@ -167,7 +169,7 @@ class GoProApp(ctk.CTk):
         default_theme = ctk.StringVar(value="Select Theme")
         self.theme_dropdown = ctk.CTkOptionMenu(
             self, values=["System", "Dark", "Light"], variable=default_theme,
-            command=self.switch_theme)
+            command=self.switch_theme, font=self.WIDGET_FONT)
         self.theme_dropdown.grid(row=0, column=3, padx=self.PADX,
                                  pady=self.PADY)
 
@@ -176,32 +178,37 @@ class GoProApp(ctk.CTk):
         self.recording_switch = ctk.CTkSwitch(
             self, text="Record Video", variable=self.recording_variable,
             onvalue="on", offvalue="off", command=self.recording_switch_event,
-            state="disabled", switch_width=50, switch_height=25)
+            state="disabled", switch_width=50, switch_height=25,
+            font=self.WIDGET_FONT)
         self.recording_switch.grid(row=1, column=0, padx=self.PADX,
                                    pady=self.PADY, sticky="nsew")
 
         # Photo Button
         self.photo_button = ctk.CTkButton(self, text="Take a Photo",
                                           command=self.take_photo,
-                                          state="disabled")
+                                          state="disabled",
+                                          font=self.WIDGET_FONT)
         self.photo_button.grid(row=1, column=1, padx=self.PADX, pady=self.PADY,
                                sticky="nsew")
 
         # Save Out Files
         self.file_group_entry = ctk.CTkEntry(
-            self, placeholder_text="Enter File Group Name")
+            self, placeholder_text="Enter File Group Name",
+            font=self.WIDGET_FONT)
         self.file_group_entry.grid(row=1, column=2, columnspan=2,
                                    padx=self.PADX, pady=self.PADY,
                                    sticky="nsew")
         self.save_files_button = ctk.CTkButton(self, text="Save Out Files",
                                                command=self.save_files,
-                                               state="disabled")
+                                               state="disabled",
+                                               font=self.WIDGET_FONT)
         self.save_files_button.grid(row=4, column=2, padx=self.PADX,
                                     pady=self.PADY, sticky="nsew")
         self.stamp_check = ctk.StringVar(value="off")
         self.timestamp_check = ctk.CTkCheckBox(self, text="Timestamp Save?",
                                                variable=self.stamp_check,
-                                               onvalue="on", offvalue="off")
+                                               onvalue="on", offvalue="off",
+                                               font=self.WIDGET_FONT)
         self.timestamp_check.grid(row=4, column=3, padx=self.PADX,
                                   pady=self.PADY)
         if not os.path.exists("../Data"):
@@ -214,36 +221,40 @@ class GoProApp(ctk.CTk):
         # Battery Indicator
         self.poll_battery = ctk.CTkButton(
             self, text="Refresh Battery Indicator",
-            command=self.poll_battery_callback, state="disabled")
+            command=self.poll_battery_callback, state="disabled",
+            font=self.WIDGET_FONT)
         self.poll_battery.grid(row=2, column=0, padx=self.PADX, pady=self.PADY,
                                sticky="nsew")
         self.battery_indicator = BatteryIndicator(self)
         self.battery_indicator.grid(row=2, column=1, columnspan=3,
                                     padx=self.PADX, pady=self.PADY,
                                     sticky="nsew")
-        
+
         # set zoom level
-        self.zoom_label = ctk.CTkLabel(self, text="Digital Zoom")
+        self.zoom_label = ctk.CTkLabel(self, text="Digital Zoom",
+                                       font=self.LABEL_FONT)
         self.zoom_label.grid(row=3, column=0, padx=self.PADX, pady=self.PADY)
         default_zoom = ctk.IntVar(value=0)
         self.zoom_slider = ctk.CTkSlider(self, from_=0, to=100,
                                          number_of_steps=101,
                                          command=self.set_zoom,
-                                         variable=default_zoom)
+                                         variable=default_zoom,
+                                         state="disabled")
         self.zoom_slider.grid(row=3, column=1, columnspan=3, padx=self.PADX,
                               pady=self.PADY, sticky="ew")
-        self.set_zoom(0)
 
         # Connecting to the GoPro
         self.connect = ctk.CTkButton(self, text="Open Connection",
-                                     command=self.connect_callback)
+                                     command=self.connect_callback,
+                                     font=self.WIDGET_FONT)
         self.connect.grid(row=4, column=1, padx=self.PADX, pady=self.PADY,
                           sticky="nsew")
         default_gopro_name = ctk.StringVar(value="GoPro 5990")
         self.gopro_list = ctk.CTkOptionMenu(
             self, values=["GoPro 5990", "GoPro 8194",
                           "Connect to First Available"],
-            command=self.select_gopro, variable=default_gopro_name)
+            command=self.select_gopro, variable=default_gopro_name,
+            font=self.WIDGET_FONT)
         self.gopro_list.grid(row=4, column=0, padx=self.PADX, pady=self.PADY,
                              sticky="nsew")
 
@@ -614,7 +625,9 @@ class GoProApp(ctk.CTk):
             self.photo_button.configure(state="normal")
             self.poll_battery.configure(state="normal")
             self.save_files_button.configure(state="normal")
+            self.zoom_slider.configure(state="normal")
             self.poll_battery_callback()
+            self.set_zoom(0)
         else:
             messagebox.showerror(title="Failed to Connect",
                                  message="The GoPro did not connect")
@@ -754,6 +767,8 @@ class BatteryIndicator(ctk.CTkFrame):
     }
 
     PADX = 10
+    LABEL_FONT = ("Inter", 20)
+    WIDGET_FONT = ("Inter", 16)
 
     def __init__(self, *args, **kwargs) -> None:
         '''
@@ -763,22 +778,27 @@ class BatteryIndicator(ctk.CTkFrame):
         self.configure(fg_color="transparent")
 
         # Battery Percentage
-        self.battery_percent_text = ctk.CTkLabel(self, text="")
+        self.battery_percent_text = ctk.CTkLabel(self, text="",
+                                                 font=self.LABEL_FONT)
         self.battery_percent_text.grid(row=0, column=0, sticky="nsew")
         self.battery_bar = ctk.CTkProgressBar(self, progress_color="green")
         self.battery_bar.grid(row=1, column=0)
 
         # Battery Life
-        self.battery_time_label = ctk.CTkLabel(self, text="Battery Life")
+        self.battery_time_label = ctk.CTkLabel(self, text="Battery Life",
+                                               font=self.LABEL_FONT)
         self.battery_time_label.grid(row=0, column=1, padx=self.PADX)
-        self.battery_time_text = ctk.CTkLabel(self, text="0m")
+        self.battery_time_text = ctk.CTkLabel(self, text="0m",
+                                              font=self.WIDGET_FONT)
         self.battery_time_text.grid(row=1, column=1, padx=self.PADX,
                                     sticky="nsew")
 
         # SD Card Remaining Time
-        self.sd_time_label = ctk.CTkLabel(self, text="Time Remaining on Card")
+        self.sd_time_label = ctk.CTkLabel(self, text="Time Remaining on Card",
+                                          font=self.LABEL_FONT)
         self.sd_time_label.grid(row=0, column=2, padx=self.PADX)
-        self.sd_time_text = ctk.CTkLabel(self, text="0 minutes")
+        self.sd_time_text = ctk.CTkLabel(self, text="0 minutes",
+                                         font=self.WIDGET_FONT)
         self.sd_time_text.grid(row=1, column=2, padx=self.PADX, sticky="nsew")
         self.update(0.0, "", "", 0)
 
