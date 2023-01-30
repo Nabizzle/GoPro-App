@@ -662,10 +662,12 @@ class GoProApp(ctk.CTk):
                 group=Params.PresetGroup.VIDEO)
             self.recording_switch.configure(text="Recording",
                                             button_color="red")
+            self.zoom_slider.configure(state="disabled")
             self.gopro.ble_command.set_shutter(shutter=Params.Toggle.ENABLE)
         else:
             self.recording_switch.configure(text="Standby",
                                             button_color="white")
+            self.zoom_slider.configure(state="normal")
             self.gopro.ble_command.set_shutter(shutter=Params.Toggle.DISABLE)
 
     def poll_battery_callback(self) -> None:
